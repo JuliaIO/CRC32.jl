@@ -8,9 +8,9 @@ It exports a single function, `crc32`, described below.
 
 The implementation uses the [`crc32` function](https://refspecs.linuxbase.org/LSB_3.0.0/LSB-Core-generic/LSB-Core-generic/zlib-crc32-1.html) in the [zlib library](https://zlib.net/) by [Mark Adler](https://en.wikipedia.org/wiki/Mark_Adler) and others.
 
-Note that the `CRC32.crc32` function provided by this package is
-typically **slower** than the `CRC32c.crc32c` of the Julia standard
-library, because CRC-32c checksums benefit from greater hardware
+Although zlib's CRC-32 implementation is [highly optimized](https://github.com/madler/zlib/blob/04f42ceca40f73e2978b50e93806c2a18c1281fc/crc32.c),
+it is still typically slower than the `CRC32c.crc32c` of the Julia standard
+library (which is also based on [code by Mark Adler](https://github.com/JuliaLang/julia/blob/162ee48e1c34b2a2cd797395353f19a7aca21aa2/src/crc32c.c)), because CRC-32c checksums benefit from greater hardware
 acceleration on typical CPUs.   The main motivation for this package
 is for validating data from external sources that only provide a
 CRC-32 checksum.
