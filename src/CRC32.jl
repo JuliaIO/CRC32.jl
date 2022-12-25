@@ -32,8 +32,6 @@ calling [`take!`](@ref).
 
 For a `String`, note that the result is specific to the UTF-8 encoding
 (a different checksum would be obtained from a different Unicode encoding).
-To checksum an `a::Array` of some other bitstype, you can do `crc32(reinterpret(UInt8,a))`,
-but note that the result may be endian-dependent.
 """
 function crc32 end
 
