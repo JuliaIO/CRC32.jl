@@ -1,6 +1,6 @@
 # CRC32
 
-CRC is a package for computing the [CRC-32 checksum](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) as defined by
+CRC32 is a package for computing the [CRC-32 checksum](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) as defined by
 the ISO 3309 / ITU-T V.42 / CRC-32-IEEE standards, similar to
 Julia's [CRC32c standard library](https://docs.julialang.org/en/v1/stdlib/CRC32c/) for the CRC-32c checksum.
 
