@@ -1,7 +1,10 @@
 name = "CRC32"
 uuid = "b4567568-9dcc-467e-9b62-c342d3a501d3"
 authors = ["Steven G. Johnson <stevenj@alum.mit.edu> and contributors"]
-version = "0.1.0"
+version = "1.0.0"
+
+[deps]
+Zlib_jll = "83775a58-1f1d-513f-b197-d71354ab007a"
 
 [compat]
 julia = "1"
