@@ -11,8 +11,12 @@ module CRC32
 ####################################################################
 # exported API, based on code in julia/stdlib/CRC32c/src/CRC32c.jl
 
-import Base.FastContiguousSubArray
 export crc32
+
+# contiguous byte arrays compatible with C `unsigned char *` API of zlib
+const ByteArray = Union{Array{UInt8},
+                        Base.FastContiguousSubArray{UInt8,N,<:Array{UInt8}} where N,
+                        Base.CodeUnits{UInt8, String}, Base.CodeUnits{UInt8, SubString{String}}}
 
 """
     crc32(data, crc::UInt32=0x00000000)
@@ -34,7 +38,7 @@ For a `String`, note that the result is specific to the UTF-8 encoding
 """
 function crc32 end
 
-crc32(a::Union{Array{UInt8},FastContiguousSubArray{UInt8,N,<:Array{UInt8}} where N}, crc::UInt32=0x00000000) = _crc32(a, crc)
+crc32(a::ByteArray, crc::UInt32=0x00000000) = _crc32(a, crc)
 crc32(s::Union{String, SubString{String}}, crc::UInt32=0x00000000) = _crc32(s, crc)
 
 """
@@ -55,7 +59,7 @@ crc32(io::IOStream, crc::UInt32=0x00000000) = _crc32(io, crc)
 import Zlib_jll: libz
 unsafe_crc32(a, n, crc) = ccall((:crc32, libz), Culong, (Culong, Ptr{UInt8}, Csize_t), crc, a, n) % UInt32
 
-_crc32(a::Union{Array{UInt8},FastContiguousSubArray{UInt8,N,<:Array{UInt8}} where N}, crc::UInt32=0x00000000) =
+_crc32(a::ByteArray, crc::UInt32=0x00000000) =
     unsafe_crc32(a, length(a) % Csize_t, crc)
 
 function _crc32(s::Union{String, SubString{String}}, crc::UInt32=0x00000000)
@@ -76,6 +80,18 @@ function _crc32(io::IO, nb::Integer, crc::UInt32=0x00000000)
 end
 _crc32(io::IO, crc::UInt32=0x00000000) = _crc32(io, typemax(Int64), crc)
 _crc32(io::IOStream, crc::UInt32=0x00000000) = _crc32(io, filesize(io)-position(io), crc)
+
+# optimized (copy-free) crc of IOBuffer
+const ByteBuffer = Base.GenericIOBuffer{<:ByteArray}
+_crc32(buf::ByteBuffer, crc::UInt32=0x00000000) = _crc32(buf, buf.size - position(buf), crc)
+function _crc32(buf::ByteBuffer, nb::Integer, crc::UInt32=0x00000000)
+    nb < 0 && throw(ArgumentError("number of bytes to checksum must be ≥ 0, got $nb"))
+    isreadable(buf) || throw(ArgumentError("read failed, IOBuffer is not readable"))
+    nb = min(nb, buf.size - position(buf))
+    crc = GC.@preserve buf unsafe_crc32(pointer(buf.data) + position(buf), nb % Csize_t, crc)
+    buf.ptr += nb
+    return crc
+end
 
 ####################################################################
 
