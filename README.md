@@ -42,4 +42,4 @@ Steven G. Johnson, based on API code from the Julia CRC32c standard
 library (also [originally contributed](https://github.com/JuliaLang/julia/pull/18297) by SGJ).   The [`crc32` function in zlib](https://github.com/madler/zlib/blob/04f42ceca40f73e2978b50e93806c2a18c1281fc/crc32.c) was
 developed by Mark Adler.
 
-The Julia code in this package (and its antecedents in the Julia CRC32c standard library) is free/open-source software under the MIT License (see `LICENSE` file).   Zlib is free/open-source software under a [similar ](https://www.zlib.net/zlib_license.html).
+The Julia code in this package (and its antecedents in the Julia CRC32c standard library) is free/open-source software under the MIT License (see `LICENSE` file).   Zlib is free/open-source software under a [similar license](https://www.zlib.net/zlib_license.html).
