@@ -55,8 +55,6 @@ crc32(io::IOStream, crc::UInt32=0x00000000) = _crc32(io, crc)
 import Zlib_jll: libz
 unsafe_crc32(a, n, crc) = ccall((:crc32, libz), Culong, (Culong, Ptr{UInt8}, Csize_t), crc, a, n) % UInt32
 
-_crc32(a::NTuple{<:Any, UInt8}, crc::UInt32=0x00000000) =
-    unsafe_crc32(Ref(a), length(a) % Csize_t, crc)
 _crc32(a::Union{Array{UInt8},FastContiguousSubArray{UInt8,N,<:Array{UInt8}} where N}, crc::UInt32=0x00000000) =
     unsafe_crc32(a, length(a) % Csize_t, crc)
 
@@ -78,13 +76,6 @@ function _crc32(io::IO, nb::Integer, crc::UInt32=0x00000000)
 end
 _crc32(io::IO, crc::UInt32=0x00000000) = _crc32(io, typemax(Int64), crc)
 _crc32(io::IOStream, crc::UInt32=0x00000000) = _crc32(io, filesize(io)-position(io), crc)
-
-_crc32(x::UInt64, crc::UInt32=0x00000000) =
-    ccall((:crc32, libz), Culong, (Culong, Ref{UInt64}, Csize_t), crc, x, 8) % UInt32
-
-# not sure why Base has these methods? skipping it to avoid UUID dep
-#_crc32(uuid::UUID, crc::UInt32=0x00000000) =
-#   ccall(:jl_crc32, UInt32, (UInt32, Ref{UInt128}, Csize_t), crc, uuid.value, 16)
 
 ####################################################################
 
