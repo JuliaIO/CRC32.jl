@@ -1,3 +1,6 @@
+[![CI](https://github.com/JuliaIO/CRC32.jl/workflows/CI/badge.svg)](https://github.com/JuliaIO/CRC32.jl/actions?query=workflow%3ACI)
+[![codecov](https://codecov.io/gh/JuliaIO/CRC32.jl/branch/master/graph/badge.svg?token=qIKzX2I5ZK)](https://codecov.io/gh/JuliaIO/CRC32.jl)
+
 # CRC32
 
 CRC32 is a package for computing the [CRC-32 checksum](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) as defined by
