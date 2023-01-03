@@ -83,7 +83,7 @@ _crc32(io::IOStream, crc::UInt32=0x00000000) = _crc32(io, filesize(io)-position(
 
 # optimized (copy-free) crc of IOBuffer (see similar crc32c function in base/iobuffer.jl)
 const ByteBuffer = Base.GenericIOBuffer{<:ByteArray}
-_crc32(buf::ByteBuffer, crc::UInt32=0x00000000) = _crc32(buf, buf.size - position(buf), crc)
+_crc32(buf::ByteBuffer, crc::UInt32=0x00000000) = _crc32(buf, bytesavailable(buf), crc)
 function _crc32(buf::ByteBuffer, nb::Integer, crc::UInt32=0x00000000)
     nb < 0 && throw(ArgumentError("number of bytes to checksum must be ≥ 0, got $nb"))
     isreadable(buf) || throw(ArgumentError("read failed, IOBuffer is not readable"))
