@@ -88,7 +88,7 @@ function _crc32(buf::ByteBuffer, nb::Integer, crc::UInt32=0x00000000)
     nb < 0 && throw(ArgumentError("number of bytes to checksum must be ≥ 0, got $nb"))
     isreadable(buf) || throw(ArgumentError("read failed, IOBuffer is not readable"))
     nb = min(nb, bytesavailable(buf))
-    crc = GC.@preserve buf unsafe_crc32(pointer(buf.data, position(buf)), nb % Csize_t, crc)
+    crc = GC.@preserve buf unsafe_crc32(pointer(buf.data, buf.ptr), nb % Csize_t, crc)
     buf.ptr += nb
     return crc
 end
