@@ -1,5 +1,5 @@
 [![CI](https://github.com/JuliaIO/CRC32.jl/workflows/CI/badge.svg)](https://github.com/JuliaIO/CRC32.jl/actions?query=workflow%3ACI)
-[![codecov](https://codecov.io/gh/JuliaIO/CRC32.jl/branch/master/graph/badge.svg?token=9lwiWxEZjM)](https://codecov.io/gh/JuliaIO/CRC32.jl)
+[![codecov](https://codecov.io/gh/JuliaIO/CRC32.jl/branch/main/graph/badge.svg?token=9lwiWxEZjM)](https://codecov.io/gh/JuliaIO/CRC32.jl)
 
 # CRC32
 
