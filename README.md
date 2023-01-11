@@ -7,7 +7,7 @@ CRC32 is a [Julia package](https://docs.julialang.org/en/v1/stdlib/Pkg/) for com
 the ISO 3309 / ITU-T V.42 / CRC-32-IEEE standards, designed as a drop-in replacement for
 Julia's [CRC32c standard library](https://docs.julialang.org/en/v1/stdlib/CRC32c/) (which computes the CRC-32**c** checksum).   A wider variety of CRC checksum algorithms is provided by the [CRC.jl package](https://github.com/andrewcooke/CRC.jl), and cryptographic checksums can be found in [MD5.jl](https://github.com/JuliaCrypto/MD5.jl) and [SHA.jl](https://github.com/JuliaCrypto/SHA.jl).
 
-• Note: This JuliaIO/CRC32.jl package is completely independent from the older [fhs/CRC32.jl package](https://github.com/fhs/CRC32.jl) by [Fazlul Shariar](https://github.com/fhs), which is no longer maintained (and much slower).  If you run `add CRC32` in [Julia's package manager](https://docs.julialang.org/en/v1/stdlib/Pkg/) you will get JuliaIO/CRC32.jl, *not* fhs/CRC32.jl.
+* *Note:* This JuliaIO/CRC32.jl package is completely independent from the older [fhs/CRC32.jl package](https://github.com/fhs/CRC32.jl) by [Fazlul Shariar](https://github.com/fhs), which is no longer maintained (and much slower).  If you run `add CRC32` in [Julia's package manager](https://docs.julialang.org/en/v1/stdlib/Pkg/) you will get JuliaIO/CRC32.jl, *not* fhs/CRC32.jl.
 
 It exports a single function, `crc32`, described below (analogous to [`CRC32c.crc32c`](https://docs.julialang.org/en/v1/stdlib/CRC32c/#CRC32c.crc32c)).
 
