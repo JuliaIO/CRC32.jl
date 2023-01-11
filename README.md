@@ -3,7 +3,7 @@
 
 # CRC32 package
 
-CRC32 is a package for computing the [CRC-32 checksum](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) as defined by
+CRC32 is a [Julia package](https://docs.julialang.org/en/v1/stdlib/Pkg/) for computing the [CRC-32 checksum](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) as defined by
 the ISO 3309 / ITU-T V.42 / CRC-32-IEEE standards, designed as a drop-in replacement for
 Julia's [CRC32c standard library](https://docs.julialang.org/en/v1/stdlib/CRC32c/) (which computes the CRC-32**c** checksum).   A wider variety of CRC checksum algorithms is provided by the [CRC.jl package](https://github.com/andrewcooke/CRC.jl), and cryptographic checksums can be found in [MD5.jl](https://github.com/JuliaCrypto/MD5.jl) and [SHA.jl](https://github.com/JuliaCrypto/SHA.jl).
 
