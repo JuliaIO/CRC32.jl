@@ -1,7 +1,7 @@
 [![CI](https://github.com/JuliaIO/CRC32.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/JuliaIO/CRC32.jl/actions/workflows/CI.yml)
 [![codecov](https://codecov.io/gh/JuliaIO/CRC32.jl/branch/main/graph/badge.svg?token=9lwiWxEZjM)](https://codecov.io/gh/JuliaIO/CRC32.jl)
 
-# CRC32 package
+# CRC32
 
 CRC32 is a [Julia package](https://docs.julialang.org/en/v1/stdlib/Pkg/) for computing the [CRC-32 checksum](https://en.wikipedia.org/wiki/Cyclic_redundancy_check) as defined by
 the ISO 3309 / ITU-T V.42 / CRC-32-IEEE standards, designed as a drop-in replacement for
