@@ -57,7 +57,7 @@ crc32(io::IOStream, crc::UInt32=0x00000000) = _crc32(io, crc)
 # using Zlib's crc32 function (which is standardized by LSB).
 
 import Zlib_jll: libz
-unsafe_crc32(a, n, crc) = ccall((:crc32, libz), Culong, (Culong, Ptr{UInt8}, Csize_t), crc, a, n) % UInt32
+unsafe_crc32(a, n, crc) = ccall((:crc32_z, libz), Culong, (Culong, Ptr{UInt8}, Csize_t), crc, a, n) % UInt32
 
 _crc32(a::ByteArray, crc::UInt32=0x00000000) =
     unsafe_crc32(a, length(a) % Csize_t, crc)

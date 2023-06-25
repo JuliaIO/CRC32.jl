@@ -54,4 +54,9 @@ using Test
     for (s,crc) in [("m", 0xe101f268), ("265FK7ZaL4", 0xde12ba25), ("picosliZI4i8rje39N6aHwHJNC6anyvnEv9Fmrw7cqiiNexvagh05QyFJlikBFGUvZTpcvPOFqcYEegVfxx05918p8NBo366raIr", 0x075b8144), ("uKMNBMv0dKyjurd1IYsJ5E26wEgI7Cr0IxmxzoZK3B9VaKT1kaBOPT5wiKUIUmu5K9mdp16wUWwFtTmJe9hVsMSDyXocQz87C0VUvRWyMooUTcKUXJqNC3bs7On0fYvoVXadiKTJoampyBdIQQCo8HE5AXjdVlnduD2OMNt6Itv8xb3BrmzTJyISWvZ371zaXl0AXSEgSUPXzJrcjSa6fCwLGjdC7SlJv8UX4jG1WkF7dZw8H770dRywea318fsaGNkSwJXhYD0CI1pE6aKEUeInRQDSUVrmonZkg6nlRDfUQQSM0gOZb2VVmbpJYf24cFHGNjyHDFEeElrfmSYXPEXkk4CaZypa3lYAozMqFW18I6buetXN7HJR2nGMAhfFqUMb3KjEqsWn0i56OGZJefv0cLVez3yQLpdObG0MURqIqyHZk4o1kdzRai7M9z3o7Cmvbc2dVIQ9eT1XJ7QRSEMt62dOPlqkJs3th1e9pyOdEyiekavY1CYbJzmwke33XiGj1EQHsEDqYqBt0goIcSxd9vWFm6E1LPs5D4xPzFS7BiMtjhGnl3qcNx24qrVCK0RNo61q6NiRJiIbe39gt9g0WRrc8ylADPlXuyRznkgd78JnR6L7cFq8Mxpik1c682gr53M9GLNVw0wncsHsFW06PbqOeOHwhBhlLFYasbKYmY50snyV6BUnetLd8HZKg7eVJxvnZga2EvPbG8T7lL6jMMxivnC7gyPQ33UnH56l9usopsv7YYUe51mwMkfoo1kL5iG1bIxwt4PAhbAtVl29Rlzd9SYK6gxvzqazb2dpaoP8nm6wfNtJTf1CFH9fWo8tW6h37uqA9dVnhTZFu5JUulN2Ie7mjTw8XGNmmPUqMwVn2drOdoOpetQb4PowQcGQ3cDjmrTOhqyGhFb7uJewdZMozCnC9ZM1fXRFGg0BhGK7SoOodEenZV9ha2spynomj7kU3wBQCER7XNIi07HUibxzTYtZlJAUmuY2", 0x9b7ca9b1)]
         @test crc32(s) == crc
     end
+
+    # Test large arrays work on 64 bit machines
+    if Sys.WORD_SIZE == 64
+        @test crc32(zeros(UInt8, 2^32)) == 0xd202ef8d #crc32(zeros(UInt8, 2^31), crc32(zeros(UInt8, 2^31)))
+    end
 end
