@@ -14,17 +14,25 @@ module CRC32
 export crc32
 
 # contiguous byte arrays compatible with C `unsigned char *` API of zlib
-const ByteArray = Union{Array{UInt8},
-                        Base.FastContiguousSubArray{UInt8,N,<:Array{UInt8}} where N,
-                        Base.CodeUnits{UInt8, String}, Base.CodeUnits{UInt8, SubString{String}}}
+if VERSION ≥ v"1.11"
+    const ByteArray = Union{Array{UInt8},
+                            Memory{UInt8},
+                            Base.FastContiguousSubArray{UInt8,N,<:Array{UInt8}} where N,
+                            Base.FastContiguousSubArray{UInt8,1,Memory{UInt8}},
+                            Base.CodeUnits{UInt8, String}, Base.CodeUnits{UInt8, SubString{String}}}
+else
+    const ByteArray = Union{Array{UInt8},
+                            Base.FastContiguousSubArray{UInt8,N,<:Array{UInt8}} where N,
+                            Base.CodeUnits{UInt8, String}, Base.CodeUnits{UInt8, SubString{String}}}
+end
 
 """
     crc32(data, crc::UInt32=0x00000000)
 
 Compute the CRC-32 checksum (ISO 3309, ITU-T V.42, CRC-32-IEEE) of the given `data`, which can be
-an `Array{UInt8}`, a contiguous subarray thereof, or a `String`.  Optionally, you can pass
-a starting `crc` integer to be mixed in with the checksum.  The `crc` parameter
-can be used to compute a checksum on data divided into chunks: performing
+an `Array{UInt8}`, a contiguous subarray thereof, a `AbstractVector{UInt8}`, or a `String`.
+Optionally, you can pass a starting `crc` integer to be mixed in with the checksum.
+The `crc` parameter can be used to compute a checksum on data divided into chunks: performing
 `crc32(data2, crc32(data1))` is equivalent to the checksum of `[data1; data2]`.
 
 There is also a method `crc32(io, nb, crc)` to checksum `nb` bytes from
@@ -39,6 +47,7 @@ For a `String`, note that the result is specific to the UTF-8 encoding
 function crc32 end
 
 crc32(a::ByteArray, crc::UInt32=0x00000000) = _crc32(a, crc)
+crc32(a::AbstractVector{UInt8}, crc::UInt32=0x00000000) = _crc32(a, crc)
 crc32(s::Union{String, SubString{String}}, crc::UInt32=0x00000000) = _crc32(s, crc)
 
 """
@@ -64,6 +73,21 @@ _crc32(a::ByteArray, crc::UInt32=0x00000000) =
 
 function _crc32(s::Union{String, SubString{String}}, crc::UInt32=0x00000000)
     unsafe_crc32(s, sizeof(s) % Csize_t, crc)
+end
+
+function _crc32(a::AbstractVector{UInt8}, crc::UInt32=0x00000000)
+    # use block size 24576=8192*3, since that is the threshold for
+    # 3-way parallel SIMD code in the underlying jl_crc32 C function.
+    last::Int64 = lastindex(a)
+    nb::Int64 = length(a)
+    buf = Vector{UInt8}(undef, min(nb, 24576))
+    while nb > 0
+        n = min(nb, 24576)
+        copyto!(buf, 1, a, last - nb + 1, n)
+        crc = unsafe_crc32(buf, n % Csize_t, crc)
+        nb -= n
+    end
+    return crc
 end
 
 function _crc32(io::IO, nb::Integer, crc::UInt32=0x00000000)
