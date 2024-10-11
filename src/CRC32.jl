@@ -78,8 +78,8 @@ end
 function _crc32(a::AbstractVector{UInt8}, crc::UInt32=0x00000000)
     # use block size 24576=8192*3, since that is the threshold for
     # 3-way parallel SIMD code in the underlying jl_crc32 C function.
-    last::Int64 = lastindex(a)
-    nb::Int64 = length(a)
+    last::Int = lastindex(a)
+    nb::Int = length(a)
     buf = Vector{UInt8}(undef, min(nb, 24576))
     while nb > 0
         n = min(nb, 24576)
