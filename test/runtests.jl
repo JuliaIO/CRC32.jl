@@ -1,5 +1,6 @@
 using CRC32
 using Test
+using OffsetArrays: Origin
 
 # based on julia/stdlib/CRC32/test/runtests.jl
 
@@ -9,6 +10,12 @@ using Test
         s = String(UInt8[1:n;])
         ss = SubString(String(UInt8[0:(n+1);]), 2:(n+1))
         @test crc32(UInt8[1:n;]) == crc == crc32(s) == crc32(ss) == crc32(codeunits(s)) == crc32(codeunits(ss))
+        @test crc == crc32(UInt8(1):UInt8(n))
+        if VERSION ≥ v"1.11"
+            m = Memory{UInt8}(undef, n)
+            m .= 1:n
+            @test crc == crc32(m)
+        end
     end
 
     # test that crc parameter is equivalent to checksum of concatenated data,
@@ -59,4 +66,9 @@ using Test
     if Sys.WORD_SIZE == 64
         @test crc32(zeros(UInt8, 2^32)) == 0xd202ef8d #crc32(zeros(UInt8, 2^31), crc32(zeros(UInt8, 2^31)))
     end
+
+    # Test crc of AbstractVector{UInt8}
+    a = view(rand(UInt8, 300000), 1:2:300000)
+    @test crc32(a) == crc32(collect(a))
+    @test crc32(Origin(0)(b"hello")) == crc32(b"hello")
 end
