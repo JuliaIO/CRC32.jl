@@ -11,14 +11,8 @@ Julia's [CRC32c standard library](https://docs.julialang.org/en/v1/stdlib/CRC32c
 
 It exports a single function, `crc32`, described below (analogous to [`CRC32c.crc32c`](https://docs.julialang.org/en/v1/stdlib/CRC32c/#CRC32c.crc32c)).
 
-The implementation uses the [`crc32` function](https://refspecs.linuxbase.org/LSB_3.0.0/LSB-Core-generic/LSB-Core-generic/zlib-crc32-1.html) in the [zlib library](https://zlib.net/) (or rather the `crc32_z` variant that supports 64-bit lengths) by [Mark Adler](https://en.wikipedia.org/wiki/Mark_Adler) and others.
-
-Although zlib's CRC-32 implementation is [highly optimized](https://github.com/madler/zlib/blob/04f42ceca40f73e2978b50e93806c2a18c1281fc/crc32.c),
-it is still typically slower than the `CRC32c.crc32c` function of the Julia standard
-library (which is also based on [code by Mark Adler](https://github.com/JuliaLang/julia/blob/162ee48e1c34b2a2cd797395353f19a7aca21aa2/src/crc32c.c)), because CRC-32c checksums benefit from greater hardware
-acceleration on typical CPUs.   The main motivation for this package
-is for validating data from external sources that only provide a
-CRC-32 checksum.
+The implementation uses the [`libdeflate_crc32` function](https://github.com/ebiggers/libdeflate/blob/92e6a0db9fa848d742f9eb286c92afc60f2c3dda/libdeflate.h#L346) from [Eric Biggers's `libdeflate` library](https://github.com/ebiggers/libdeflate).
+This implementation is heavily optimized, and on x86-64 and arm64 hardware its speed is approximately on par with the `CRC32c.crc32c` function from the Julia standard library.
 
 ## `crc32(data, [crc])` and `crc32(io, [crc])`:
 
@@ -44,7 +38,7 @@ For a `String`, note that the result is specific to the UTF-8 encoding
 ## Authors
 
 Steven G. Johnson, based on API code from the Julia CRC32c standard
-library (also [originally contributed](https://github.com/JuliaLang/julia/pull/18297) by SGJ).   The [`crc32` function in zlib](https://github.com/madler/zlib/blob/04f42ceca40f73e2978b50e93806c2a18c1281fc/crc32.c) was
-developed by Mark Adler.
+library (also [originally contributed](https://github.com/JuliaLang/julia/pull/18297) by SGJ).   The [`libdeflate_crc32` function](https://github.com/ebiggers/libdeflate/blob/master/lib/crc32.c) was developed by Eric Biggers.
 
-The Julia code in this package (and its antecedents in the Julia CRC32c standard library) is free/open-source software under the MIT License (see `LICENSE` file).   Zlib is free/open-source software under a [similar license](https://www.zlib.net/zlib_license.html).
+The Julia code in this package (and its antecedents in the Julia CRC32c standard library) is free/open-source software under the MIT License (see `LICENSE` file).
+The backing `libdeflate` library is [also under MIT licence](https://github.com/ebiggers/libdeflate/blob/master/COPYING).
