@@ -63,7 +63,7 @@ crc32(io::IOStream, crc::UInt32=0x00000000) = _crc32(io, crc)
 
 ####################################################################
 # Low-level code, based on code from julia/base/util.jl but
-# using libdeflate's crc32 function (which is standardized by LSB).
+# using libdeflate's crc32 function.
 
 using libdeflate_jll
 
